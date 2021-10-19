@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  
+  <title>Redis主从复制 - ZzyBlog</title>
+  
+    <link rel="shortcut icon" href="/web/zzy/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+<link rel="stylesheet" href="/web/zzy/css/var.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/main.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/typography.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/components.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/nav.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/footer.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/post-list.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/waline.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/web/zzy/css/post.css">
+
+  
+
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+ 
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body data-color-scheme="auto">
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">诸葛庐</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/web/zzy/archives/index.html">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/friends/index.html">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/projects/index.html">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/about/index.html">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/1122pcd1122" target="_blank">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        <article class="post">
+    <div class="meta">
+        
+        <div class="date" id="date">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <span>October</span>
+            
+            
+            
+            <span>19,</span>
+            <span>2021</span>
+        </div>
+        
+
+        <h2 class="title">Redis主从复制</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <h1 id="Redis主从复制"><a href="#Redis主从复制" class="headerlink" title="Redis主从复制"></a>Redis主从复制</h1><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>主从复制，是将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点（master/leader），后者称为从节点（slave/follower）;数据的复制是单向的，只能由主节点到从节点。Master以写为主，Slave以读为主。</p>
+<p>默认情况下，每台Redis服务器都是主节点；且一个主节点可以有多个从节点（或没有从节点），但一个从节点只能有一个主节点。</p>
+<p>只要在公司中，主从复制就是必须要使用的，因为在真实的项目中不可能单机使用Redis</p>
+<h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><p>只配置从库，不用配置主库</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; info replication <span class="comment"># 查看当前库的信息</span></span><br><span class="line"><span class="comment"># Replication</span></span><br><span class="line">role:master <span class="comment"># 角色</span></span><br><span class="line">connected_slaves:0 <span class="comment"># 没有从机</span></span><br><span class="line">master_failover_state:no-failover</span><br><span class="line">master_replid:075846da9f88379e00f0288f550e128cbe3b4c79</span><br><span class="line">master_replid2:0000000000000000000000000000000000000000</span><br><span class="line">master_repl_offset:0</span><br><span class="line">second_repl_offset:-1</span><br><span class="line">repl_backlog_active:0</span><br><span class="line">repl_backlog_size:1048576</span><br><span class="line">repl_backlog_first_byte_offset:0</span><br><span class="line">repl_backlog_histlen:0</span><br></pre></td></tr></table></figure>
+
+<p>复制3个配置文件，然后修改对应的信息</p>
+<ol>
+<li>端口</li>
+<li>pid名字</li>
+<li>log文件名字</li>
+<li>dump.rdb 名字</li>
+</ol>
+<p>修改完毕之后，启动我们的3个redis服务器，可以通过进程信息查看</p>
+<h2 id="一主二从"><a href="#一主二从" class="headerlink" title="一主二从"></a>一主二从</h2><p>默认情况下，每台Redis服务器都是主节点；我们一般情况下只用配置从机就好了</p>
+<p>一主（79）二从（80、81）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6380&gt; slaveof 127.0.0.1 6379 <span class="comment"># 找谁当自己的老大</span></span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6380&gt; info replication</span><br><span class="line"><span class="comment"># Replication</span></span><br><span class="line">role:slave <span class="comment"># 当前角色是从机</span></span><br><span class="line">master_host:127.0.0.1 <span class="comment"># 可以看到主机的信息</span></span><br><span class="line">master_port:6379</span><br><span class="line">master_link_status:up</span><br><span class="line">master_last_io_seconds_ago:0</span><br><span class="line">master_sync_in_progress:0</span><br><span class="line">slave_read_repl_offset:14</span><br><span class="line">slave_repl_offset:14</span><br><span class="line">slave_priority:100</span><br><span class="line">slave_read_only:1</span><br><span class="line">replica_announced:1</span><br><span class="line">connected_slaves:0</span><br><span class="line">master_failover_state:no-failover</span><br><span class="line">master_replid:de097fe0bc1aed8a426ea00c21dbf3803cd97b6b</span><br><span class="line">master_replid2:0000000000000000000000000000000000000000</span><br><span class="line">master_repl_offset:14</span><br><span class="line">second_repl_offset:-1</span><br><span class="line">repl_backlog_active:1</span><br><span class="line">repl_backlog_size:1048576</span><br><span class="line">repl_backlog_first_byte_offset:1</span><br><span class="line">repl_backlog_histlen:14</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在主机中查看</span></span><br><span class="line"><span class="comment"># Replication</span></span><br><span class="line">role:master</span><br><span class="line">connected_slaves:1 <span class="comment"># 多了从机的配置</span></span><br><span class="line">slave0:ip=127.0.0.1,port=6380,state=online,offset=98,lag=0</span><br><span class="line">master_failover_state:no-failover</span><br><span class="line">master_replid:de097fe0bc1aed8a426ea00c21dbf3803cd97b6b</span><br><span class="line">master_replid2:0000000000000000000000000000000000000000</span><br><span class="line">master_repl_offset:98</span><br><span class="line">second_repl_offset:-1</span><br><span class="line">repl_backlog_active:1</span><br><span class="line">repl_backlog_size:1048576</span><br><span class="line">repl_backlog_first_byte_offset:1</span><br><span class="line">repl_backlog_histlen:98</span><br></pre></td></tr></table></figure>
+
+<p>如果两个都配置完，我们拥有了两个从机</p>
+<blockquote>
+<p>细节</p>
+</blockquote>
+<p> 主机可以写，从机不能写只能读！主机中所有信息和数据都会自动被从机保存</p>
+<p>测试：主机断开连接，从机依旧可以连接到主机，但是没有写操作，这个时候，主机如果回来了，从机依旧可以直接获取到主机写的信息</p>
+<p>如果时使用命令行来配置的主从，这个时候如果重启了，就会变回主机，只要变为从机，立马就会从主机中获取值</p>
+<blockquote>
+<p>如果没有老大了，这个时候能不能选择一个老大出来呢？手动</p>
+</blockquote>
+<p>如果主机断开连接，我们可以用 <code>slaveof no one</code>使自己变成主机，其他的节点就可以手动连接到最新的主机</p>
+<h2 id="哨兵模式（自动选举老大）"><a href="#哨兵模式（自动选举老大）" class="headerlink" title="哨兵模式（自动选举老大）"></a>哨兵模式（自动选举老大）</h2><blockquote>
+<p>概述</p>
+</blockquote>
+<p>哨兵模式是一种特殊的模式，首先Redis提供了哨兵的命令，哨兵是一个独立的进程，作为进程，它会独立运行。其原理是<strong>哨兵通过发送命令，等待Redis服务器响应，从而监控运行的多个Redis实例。</strong></p>
+<p>这里的哨兵有两个作用</p>
+<ul>
+<li>通过发送命令，让Redis服务器返回监控其运行状态，包括主服务器和从服务器。</li>
+<li>当哨兵监测到master宕机，会自动将slave切换成master，然后通过<strong>发布订阅模式</strong>通知其他的从服务器，修改配置文件，让它们切换主机。</li>
+</ul>
+<p>然而一个哨兵进程对Redis服务器进行监控，可能会出现问题，为此，我们可以使用多个哨兵进行监控。各个哨兵之间还会进行监控，这样就形成了多哨兵模式。</p>
+<p>用文字描述一下<strong>故障切换（failover）</strong>的过程。假设主服务器宕机，哨兵1先检测到这个结果，系统并不会马上进行failover过程，仅仅是哨兵1主观的认为主服务器不可用，这个现象称为<strong>主观下线</strong>。当后面的哨兵也检测到主服务器不可用，并且数量达到一定值时，那么哨兵之间就会进行一次投票，投票的结果由一个哨兵发起，进行failover操作。切换成功后，就会通过发布订阅模式，让各个哨兵把自己监控的从服务器实现切换主机，这个过程称为<strong>客观下线</strong>。这样对于客户端而言，一切都是透明的。</p>
+<blockquote>
+<p>测试</p>
+</blockquote>
+<ol>
+<li><p>配置哨兵模式配置文件sentinel.conf</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sentinel monitor 被监控的名称 host port 1</span></span><br><span class="line">sentinel monitor myredis 127.0.0.1 6379 1</span><br></pre></td></tr></table></figure>
+
+<p>后面这个数字1，代表主机挂了，slave投票看让谁接替成为主机，票数最多的就会成为主机</p>
+</li>
+<li><p>启动哨兵</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-sentinel kconfig/sentinel.conf</span><br></pre></td></tr></table></figure>
+
+<p>如果Master节点断开了，这个时候就会从从机中随机选择一个服务器作为Master节点</p>
+<p>如果原来的主机回来了，只能归并在新的主机下，当作从机</p>
+<blockquote>
+<p>哨兵模式</p>
+</blockquote>
+<p>优点</p>
+<ol>
+<li>哨兵集群，基于主从复制模式，所有的主从配置优点，他都有</li>
+<li>主从可以切换，故障可以转移，系统的可用性就会更好</li>
+<li>哨兵模式就是主从模式的升级，手动到自动，更加健壮</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>Redis不好在线扩容，集群容量一旦到达上限</li>
+<li>实现哨兵模式的配置其实是很麻烦的，其中有很多选择</li>
+</ol>
+<h2 id="Redis缓存穿透和雪崩"><a href="#Redis缓存穿透和雪崩" class="headerlink" title="Redis缓存穿透和雪崩"></a>Redis缓存穿透和雪崩</h2><h3 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h3><blockquote>
+<p>概念</p>
+</blockquote>
+<p>缓存穿透的概念很简单，用户想要查询一个数据，发现redis内存数据库没有，也就是缓存没有命中，于是向持久层数据库查询。发现也没有，于是本次查询失败。当用户很多的时候，缓存都没有命中，于是都去请求了持久层数据库。这会给持久层数据库造成很大的压力，这时候就相当于出现了缓存穿透。</p>
+<blockquote>
+<p>解决方案</p>
+</blockquote>
+<h5 id="布隆过滤器"><a href="#布隆过滤器" class="headerlink" title="布隆过滤器"></a>布隆过滤器</h5><p>布隆过滤器是一种数据结构，很简单首先也是对所有可能查询的参数以hash形式存储，当用户想要查询的时候，使用布隆过滤器发现不在集合中，就直接丢弃，不再对持久层查询。</p>
+<h5 id="缓存空对象"><a href="#缓存空对象" class="headerlink" title="缓存空对象"></a>缓存空对象</h5><p>当存储层不命中后，即使返回的空对象也将其缓存起来，同时会设置一个过期时间，之后再访问这个数据将会从缓存中获取，保护了后端数据源；</p>
+<p>但是这种方法会存在两个问题：</p>
+<ol>
+<li>如果空值能够被缓存起来，这就意味着缓存需要更多的空间存储更多的键，因为这当中可能会有很多的空值的键；</li>
+<li>即使对空值设置了过期时间，还是会存在缓存层和存储层的数据会有一段时间窗口的不一致，这对于需要保持一致性的业务会有影响。</li>
+</ol>
+</li>
+</ol>
+
+    </div>
+
+    <div class="about">
+        <h1>About this Post</h1>
+        <p>This post is written by Zhangziyang, licensed under <a
+                target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+    </div>
+
+    
+        
+    
+</article>
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h4 class="title">Blog</h4>
+                
+                <a href="/" class="item" target="_blank">Blog</a>
+                
+                <a href="/archives" class="item" target="_blank">Archives</a>
+                
+                <a href="/friends" class="item" target="_blank">Friends</a>
+                
+                <a href="/projects" class="item" target="_blank">Projects</a>
+                
+                <a href="/about" class="item" target="_blank">About</a>
+                
+                <a href="/atom.xml" class="item" target="_blank">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h4 class="title">Projects</h4>
+                
+                <a href="https://github.com/transmister" class="item" target="_blank">Transmister</a>
+                
+                <a href="https://github.com/MrWillCom/css-and-js-windows-uwp-xaml-controls" class="item" target="_blank">CSS&amp;JS Windows UWP XAML Controls</a>
+                
+                <a href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item" target="_blank">Theme Cupertino</a>
+                
+                <a href="https://github.com/MrWillCom/github-dark-mode" class="item" target="_blank">GitHub Dark Mode</a>
+                
+            </div>
+            
+            <div class="group">
+                <h4 class="title">Me</h4>
+                
+                <a href="https://github.com/1122pcd1122" class="item" target="_blank">GitHub</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2021 Zhangziyang<br >Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></span>
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+        
+<script src="/web/zzy/js/main.js"></script>
+
+        
+    </body>
+</html>

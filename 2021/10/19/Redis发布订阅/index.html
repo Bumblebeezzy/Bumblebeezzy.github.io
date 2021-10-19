@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  
+  <title>Redis发布订阅 - ZzyBlog</title>
+  
+    <link rel="shortcut icon" href="/web/zzy/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+<link rel="stylesheet" href="/web/zzy/css/var.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/main.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/typography.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/components.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/nav.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/footer.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/post-list.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/waline.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/web/zzy/css/post.css">
+
+  
+
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+ 
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body data-color-scheme="auto">
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">诸葛庐</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/web/zzy/archives/index.html">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/friends/index.html">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/projects/index.html">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/about/index.html">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/1122pcd1122" target="_blank">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        <article class="post">
+    <div class="meta">
+        
+        <div class="date" id="date">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <span>October</span>
+            
+            
+            
+            <span>19,</span>
+            <span>2021</span>
+        </div>
+        
+
+        <h2 class="title">Redis发布订阅</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <h1 id="Redis发布订阅"><a href="#Redis发布订阅" class="headerlink" title="Redis发布订阅"></a>Redis发布订阅</h1><p>通道 队列 发送者 ===== 订阅者</p>
+<p>Redis 发布订阅(pub/sub)是一种消息通道模式：发送者(pub)发送消息，订阅者(sub)接收消息</p>
+<p>Redis客户端可以订阅任意数量的频道</p>
+<p>第一个：消息发送者 第二个：频道 第三个：消息订阅者</p>
+<blockquote>
+<p>命令</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SUBSCRIBE zzy <span class="comment"># 订阅一个频道</span></span><br><span class="line">publish zzy <span class="string">&quot;hello,zzy&quot;</span> <span class="comment"># 消息发送者向频道中发布一个消息</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>测试</p>
+</blockquote>
+<p>订阅端：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SUBSCRIBE zzy <span class="comment"># 订阅一个频道</span></span><br><span class="line">Reading messages... (press Ctrl-C to quit)</span><br><span class="line">1) <span class="string">&quot;subscribe&quot;</span></span><br><span class="line">2) <span class="string">&quot;zzy&quot;</span></span><br><span class="line">3) (<span class="built_in">integer</span>) 1</span><br><span class="line"><span class="comment"># 等待读取推送的信息</span></span><br><span class="line">1) <span class="string">&quot;message&quot;</span> <span class="comment"># 消息</span></span><br><span class="line">2) <span class="string">&quot;zzy&quot;</span> <span class="comment"># 哪个频道的消息</span></span><br><span class="line">3) <span class="string">&quot;hello,zzy&quot;</span> <span class="comment"># 消息的具体内容</span></span><br><span class="line"></span><br><span class="line">1) <span class="string">&quot;message&quot;</span></span><br><span class="line">2) <span class="string">&quot;zzy&quot;</span></span><br><span class="line">3) <span class="string">&quot;hello,redis&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>发送端：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; publish zzy <span class="string">&quot;hello,zzy&quot;</span> <span class="comment"># 发布者发布消息到频道</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; publish zzy <span class="string">&quot;hello,redis&quot;</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>原理</p>
+</blockquote>
+<ol>
+<li>发布原理</li>
+</ol>
+<p>(1)PUBLISH</p>
+<p>当客户端向某个频道发送消息时，Redis首先在结构体redisServer中的pubsub_channels中找出键为该频道的结点，遍历该结点的值，找出所有的客户端，将消息发送给这些客户端。然后，遍历结构体Redis Client中的pubsub_patterns，找出包含该频道的模式的结点，将消息发送给订阅了该模式的客户端。</p>
+<p>(2) SUBSCRIBE</p>
+<p>首先，在客户端结构体client中，有一个属性为pubsub_channels，该属性表明了该客户端订阅的所有频道，它是一个字典类型，通过哈希表实现，其中的每个元素都包含了一个键值对以及指向下一个元素的指针，每次订阅都要向其中插入一个结点，键表示订阅的频道，值为空。然后，在表示服务器端的结构体redisServer中，也有一个属性为pubsub_channels，但此处它表示的是该服务器端中的所有频道以及订阅了这个频道的客户端，它也是一个字典类型，插入结点时，键表示频道，值则是订阅了这个频道的所有客户端组成的链表。最后Redis通知客户端其订阅成功。</p>
+<p>(3) PSUBSCRIBE</p>
+<p>当客户端订阅某个模式时，Redis同样需要将该模式和该客户端绑定。首先，在结构体client中，有一个属性为pubsub_patterns，该属性表示该客户端订阅的所有模式，它是一个链表类型，每个结点包括了订阅的模式和指向下一个结点的指针，每次订阅某个模式时，都要向其中插入一个结点。然后，在结构体redisServer中，有一个属性也叫pubsub_patterns，它表示了该服务器端中的所有模式和订阅了这些模式的客户端，它也是一个链表类型，插入结点时，每个结点都要包含订阅的模式，以及订阅这个模式的客户端，和指向下一个结点的指针,个人理解为是一种模糊匹配</p>
+<p>(4) UNSUBSCRIBE（退订）</p>
+<p>UNSUBSCRIBE命令可以退订指定的频道， 这个命令执行的是订阅的反操作： 它从 pubsub_channels 字典的给定频道（键）中， 删除关于当前客户端的信息， 这样被退订频道的信息就不会再发送给这个客户端。</p>
+<blockquote>
+<p>使用场景</p>
+</blockquote>
+<ol>
+<li>实时消息系统</li>
+<li>实时聊天（频道当做聊天室，将信息回显给所有人）</li>
+<li>订阅，关注系统</li>
+</ol>
+
+    </div>
+
+    <div class="about">
+        <h1>About this Post</h1>
+        <p>This post is written by Zhangziyang, licensed under <a
+                target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+    </div>
+
+    
+        
+    
+</article>
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h4 class="title">Blog</h4>
+                
+                <a href="/" class="item" target="_blank">Blog</a>
+                
+                <a href="/archives" class="item" target="_blank">Archives</a>
+                
+                <a href="/friends" class="item" target="_blank">Friends</a>
+                
+                <a href="/projects" class="item" target="_blank">Projects</a>
+                
+                <a href="/about" class="item" target="_blank">About</a>
+                
+                <a href="/atom.xml" class="item" target="_blank">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h4 class="title">Projects</h4>
+                
+                <a href="https://github.com/transmister" class="item" target="_blank">Transmister</a>
+                
+                <a href="https://github.com/MrWillCom/css-and-js-windows-uwp-xaml-controls" class="item" target="_blank">CSS&amp;JS Windows UWP XAML Controls</a>
+                
+                <a href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item" target="_blank">Theme Cupertino</a>
+                
+                <a href="https://github.com/MrWillCom/github-dark-mode" class="item" target="_blank">GitHub Dark Mode</a>
+                
+            </div>
+            
+            <div class="group">
+                <h4 class="title">Me</h4>
+                
+                <a href="https://github.com/1122pcd1122" class="item" target="_blank">GitHub</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2021 Zhangziyang<br >Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></span>
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+        
+<script src="/web/zzy/js/main.js"></script>
+
+        
+    </body>
+</html>
