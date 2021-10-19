@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  
+  <title>RDB - ZzyBlog</title>
+  
+    <link rel="shortcut icon" href="/web/zzy/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+<link rel="stylesheet" href="/web/zzy/css/var.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/main.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/typography.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/components.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/nav.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/footer.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/post-list.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/waline.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/web/zzy/css/post.css">
+
+  
+
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+ 
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body data-color-scheme="auto">
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">诸葛庐</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/web/zzy/archives/index.html">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/friends/index.html">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/projects/index.html">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/about/index.html">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/1122pcd1122" target="_blank">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        <article class="post">
+    <div class="meta">
+        
+        <div class="date" id="date">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <span>October</span>
+            
+            
+            
+            <span>18,</span>
+            <span>2021</span>
+        </div>
+        
+
+        <h2 class="title">RDB</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <h2 id="RDB-Redis-DataBase"><a href="#RDB-Redis-DataBase" class="headerlink" title="RDB( Redis DataBase )"></a>RDB( Redis DataBase )</h2><h3 id="1-什么是RDB"><a href="#1-什么是RDB" class="headerlink" title="1.什么是RDB"></a>1.什么是RDB</h3><p>​        RDB持久化是把当前进程数据生成快照保存到硬盘的过程，触发RDB持久化过程分为<strong>手动触发</strong>和<strong>自动触发</strong>。</p>
+<h3 id="2-触发机制"><a href="#2-触发机制" class="headerlink" title="2.触发机制"></a>2.触发机制</h3><ol>
+<li><p>save的规则满足的情况下，会自动触发RDB规则</p>
+</li>
+<li><p>执行了flushall命令也会触发RDB规则</p>
+</li>
+<li><p>退出redis，也会产生RDB文件</p>
+<p>备份就自动生成一个dump.rdb文件</p>
+</li>
+</ol>
+<h3 id="3-如何恢复RDB文件"><a href="#3-如何恢复RDB文件" class="headerlink" title="3.如何恢复RDB文件"></a>3.如何恢复RDB文件</h3><ol>
+<li>只需要将RDB文件放在我们redis启动目录就可以，redis启动的时候会自动检查dump.rdb恢复其中的数据</li>
+<li>查看需要存在的位置</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; config get dir</span><br><span class="line">1) <span class="string">&quot;dir&quot;</span></span><br><span class="line">2) <span class="string">&quot;/usr/local/bin&quot;</span> <span class="comment"># 如果在这个目录下存在 dump.rdb 文件，启动就会恢复其中的数据</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-优点"><a href="#4-优点" class="headerlink" title="4.优点"></a>4.优点</h3><ol>
+<li>适合大规模的数据恢复！</li>
+<li>对数据的完整性要求不高！</li>
+</ol>
+<h3 id="5-缺点"><a href="#5-缺点" class="headerlink" title="5.缺点"></a>5.缺点</h3><ol>
+<li>需要一定的时间间隔进程操作！如果redis意外宕机了，这个最后一次修改数据就没有了！</li>
+<li>fork进程的时候，会占用一定的内存空间！</li>
+</ol>
+
+    </div>
+
+    <div class="about">
+        <h1>About this Post</h1>
+        <p>This post is written by Zhangziyang, licensed under <a
+                target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+    </div>
+
+    
+        
+    
+</article>
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h4 class="title">Blog</h4>
+                
+                <a href="/" class="item" target="_blank">Blog</a>
+                
+                <a href="/archives" class="item" target="_blank">Archives</a>
+                
+                <a href="/friends" class="item" target="_blank">Friends</a>
+                
+                <a href="/projects" class="item" target="_blank">Projects</a>
+                
+                <a href="/about" class="item" target="_blank">About</a>
+                
+                <a href="/atom.xml" class="item" target="_blank">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h4 class="title">Projects</h4>
+                
+                <a href="https://github.com/transmister" class="item" target="_blank">Transmister</a>
+                
+                <a href="https://github.com/MrWillCom/css-and-js-windows-uwp-xaml-controls" class="item" target="_blank">CSS&amp;JS Windows UWP XAML Controls</a>
+                
+                <a href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item" target="_blank">Theme Cupertino</a>
+                
+                <a href="https://github.com/MrWillCom/github-dark-mode" class="item" target="_blank">GitHub Dark Mode</a>
+                
+            </div>
+            
+            <div class="group">
+                <h4 class="title">Me</h4>
+                
+                <a href="https://github.com/1122pcd1122" class="item" target="_blank">GitHub</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2021 Zhangziyang<br >Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></span>
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+        
+<script src="/web/zzy/js/main.js"></script>
+
+        
+    </body>
+</html>

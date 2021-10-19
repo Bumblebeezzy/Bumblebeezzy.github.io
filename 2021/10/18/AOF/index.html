@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  
+  <title>AOF - ZzyBlog</title>
+  
+    <link rel="shortcut icon" href="/web/zzy/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+<link rel="stylesheet" href="/web/zzy/css/var.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/main.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/typography.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/components.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/nav.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/footer.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/post-list.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/waline.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/web/zzy/css/post.css">
+
+  
+
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+ 
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body data-color-scheme="auto">
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">诸葛庐</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/web/zzy/archives/index.html">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/friends/index.html">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/projects/index.html">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/about/index.html">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/1122pcd1122" target="_blank">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        <article class="post">
+    <div class="meta">
+        
+        <div class="date" id="date">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <span>October</span>
+            
+            
+            
+            <span>18,</span>
+            <span>2021</span>
+        </div>
+        
+
+        <h2 class="title">AOF</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <h2 id="AOF-Append-Only-File"><a href="#AOF-Append-Only-File" class="headerlink" title="AOF ( Append Only File)"></a>AOF ( Append Only File)</h2><h3 id="1-什么是AOF"><a href="#1-什么是AOF" class="headerlink" title="1.什么是AOF"></a>1.什么是AOF</h3><p>​        AOF(Append Only File)持久化：以独立日志的方式记录每次写命令，重启时再重新执行AOF文件中命令达到恢复数据的目的。AOF的主要作用是解决了数据持久化的实时性，目前已经是Redis持久化的主流方式。</p>
+<blockquote>
+<p>AOF保存的是 appendonly.aof 文件</p>
+</blockquote>
+<p>配置文件中 appendonly 默认为 no 我们需要手动进行配置，我们只需要将 appendonly 改为 yes 就开启了 AOF</p>
+<p>如果这个aof文件有错误，这时候redis是启动不起来的，我们需要修复这个aof文件redis给我们提供了这样一个工具redis-check-aof –fix</p>
+<p>如果文件正常，重启就可以启动了</p>
+<blockquote>
+<p>重写规则说明：aof默认是文件的无限追加，文件会越来越大。如果AOF文件大于一定的大小，fork一个新的进程来将我们的文件进行重写</p>
+</blockquote>
+<h3 id="2-优点"><a href="#2-优点" class="headerlink" title="2.优点"></a>2.优点</h3><ol>
+<li>每一次修改都同步，文件完整性更好</li>
+<li>每秒同步一次，可能会丢失一秒的数据</li>
+<li>从不同步，效率最高</li>
+</ol>
+<h3 id="3-缺点"><a href="#3-缺点" class="headerlink" title="3.缺点"></a>3.缺点</h3><ol>
+<li>相对于数据文件来说，aof远远大于rdb，修复的速度也比rdb慢</li>
+<li>AOF运行效率也要比rdb慢，所以我们redis默认的配置就是rdb持久化</li>
+</ol>
+
+    </div>
+
+    <div class="about">
+        <h1>About this Post</h1>
+        <p>This post is written by Zhangziyang, licensed under <a
+                target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+    </div>
+
+    
+        
+    
+</article>
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h4 class="title">Blog</h4>
+                
+                <a href="/" class="item" target="_blank">Blog</a>
+                
+                <a href="/archives" class="item" target="_blank">Archives</a>
+                
+                <a href="/friends" class="item" target="_blank">Friends</a>
+                
+                <a href="/projects" class="item" target="_blank">Projects</a>
+                
+                <a href="/about" class="item" target="_blank">About</a>
+                
+                <a href="/atom.xml" class="item" target="_blank">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h4 class="title">Projects</h4>
+                
+                <a href="https://github.com/transmister" class="item" target="_blank">Transmister</a>
+                
+                <a href="https://github.com/MrWillCom/css-and-js-windows-uwp-xaml-controls" class="item" target="_blank">CSS&amp;JS Windows UWP XAML Controls</a>
+                
+                <a href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item" target="_blank">Theme Cupertino</a>
+                
+                <a href="https://github.com/MrWillCom/github-dark-mode" class="item" target="_blank">GitHub Dark Mode</a>
+                
+            </div>
+            
+            <div class="group">
+                <h4 class="title">Me</h4>
+                
+                <a href="https://github.com/1122pcd1122" class="item" target="_blank">GitHub</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2021 Zhangziyang<br >Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></span>
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+        
+<script src="/web/zzy/js/main.js"></script>
+
+        
+    </body>
+</html>
