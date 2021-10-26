@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  
+  <title>Rest风格说明 - ZzyBlog</title>
+  
+    <link rel="shortcut icon" href="/web/zzy/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+<link rel="stylesheet" href="/web/zzy/css/var.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/main.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/typography.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/components.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/nav.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/footer.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/post-list.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/waline.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/web/zzy/css/post.css">
+
+  
+
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+ 
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body data-color-scheme="auto">
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">诸葛庐</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/web/zzy/archives/index.html">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/friends/index.html">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/projects/index.html">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/about/index.html">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/1122pcd1122" target="_blank">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        <article class="post">
+    <div class="meta">
+        
+        <div class="date" id="date">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <span>October</span>
+            
+            
+            
+            <span>22,</span>
+            <span>2021</span>
+        </div>
+        
+
+        <h2 class="title">Rest风格说明</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <h1 id="Rest风格说明"><a href="#Rest风格说明" class="headerlink" title="Rest风格说明"></a>Rest风格说明</h1><p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211022173456306.png" alt="image-20211022173456306"></p>
+<h3 id="关于索引的基本操作"><a href="#关于索引的基本操作" class="headerlink" title="关于索引的基本操作"></a>关于索引的基本操作</h3><blockquote>
+<p>基础测试</p>
+</blockquote>
+<ol>
+<li>创建一个索引</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PUT /索引名/~类型名~/文档id</span><br><span class="line">&#123;请求体&#125;</span><br><span class="line">例：</span><br><span class="line">PUT /test1/type1/1</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;张子扬&quot;</span>,</span><br><span class="line">  <span class="string">&quot;age&quot;</span>: 3</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>完成了自动增加索引，数据也成功地添加了</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211022171457109.png" alt="image-20211022171457109"></p>
+<ol start="2">
+<li>指定字段类型</li>
+</ol>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211022172040279.png" alt="image-20211022172040279"></p>
+<p>获得这个规则，可以通过GET请求获取具体的信息</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211022172156475.png" alt="image-20211022172156475"></p>
+<ol start="3">
+<li>查看默认的信息</li>
+</ol>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211022172418747.png" alt="image-20211022172418747"></p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211022172504235.png" alt="image-20211022172504235"></p>
+<p>如果自己的文档字段没有指定，那么es就会给我们默认配置字段类型</p>
+<p>扩展：通过命令elasticsearch 索引情况 通过get _cat/ 可以获得es当前的很多信息</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211022172953029.png" alt="image-20211022172953029"></p>
+<blockquote>
+<p>修改还是使用PUT即可，然后覆盖 版本号加一</p>
+</blockquote>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211022173337938.png" alt="image-20211022173337938"></p>
+<blockquote>
+<p>删除索引</p>
+</blockquote>
+<p>同过DELETE命令来实现删除，根据你的请求来判断是删除索引还是删除文档记录</p>
+<h3 id="关于文档的基本操作"><a href="#关于文档的基本操作" class="headerlink" title="关于文档的基本操作"></a>关于文档的基本操作</h3><blockquote>
+<p>基本操作</p>
+</blockquote>
+<ol>
+<li>添加数据</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PUT /zzy/user/1</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;zzy&quot;</span>,</span><br><span class="line">  <span class="string">&quot;age&quot;</span>: 21,</span><br><span class="line">  <span class="string">&quot;desc&quot;</span>: <span class="string">&quot;一顿操作猛如虎&quot;</span>,</span><br><span class="line">  <span class="string">&quot;tags&quot;</span>:[<span class="string">&quot;暖男&quot;</span>,<span class="string">&quot;技术&quot;</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211024111533015.png" alt="image-20211024111533015"></p>
+<ol start="2">
+<li>获取数据GET</li>
+</ol>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211024111858966.png" alt="image-20211024111858966"></p>
+<ol start="3">
+<li>更新数据 PUT</li>
+</ol>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211024112004680.png" alt="image-20211024112004680"></p>
+<ol start="4">
+<li>POST更新（推荐）</li>
+</ol>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211024112756185.png" alt="image-20211024112756185"></p>
+<p>简单地搜索</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET zzy/user/1</span><br></pre></td></tr></table></figure>
+
+<p>简单的条件查询，可以根据默认的映射规则产生基本的查询</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211024201141581.png" alt="image-20211024201141581"></p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211024201241517.png" alt="image-20211024201241517"></p>
+<blockquote>
+<p>复杂操作 select（排序，分页，高亮，模糊查询，精准查询）</p>
+</blockquote>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211024201549071.png" alt="image-20211024201549071"></p>
+<p>查询的参数体用Json构建</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211024202214192.png" alt="image-20211024202214192"></p>
+<p>hit:索引和文档的信息，查询结果总数，然后就是查询出来的具体的文档，数据中的东西都可以遍历出来，分数：我们可以通过它来判断谁更加符合结果</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211024202718667.png" alt="image-20211024202718667"></p>
+<p>结果的过滤，只查询name和desc字段</p>
+<blockquote>
+<p>排序</p>
+</blockquote>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211024203002784.png" alt="image-20211024203002784"></p>
+<p>通过age字段排序</p>
+<blockquote>
+<p>分页</p>
+</blockquote>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211024203142685.png" alt="image-20211024203142685"></p>
+<p>“from” 从第几个数据开始</p>
+<p>“size” 返回多少条数据（单页面的数据）</p>
+<blockquote>
+<p>布尔值查询</p>
+</blockquote>
+<p>must（and），所有的条件都要符合</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211024203854956.png" alt="image-20211024203854956"></p>
+<p>should（or）</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211024204243623.png" alt="image-20211024204243623"></p>
+<p>must_not（not）</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211024205738171.png" alt="image-20211024205738171"></p>
+<p>过滤器filter</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211024210056589.png" alt="image-20211024210056589"></p>
+<ul>
+<li>gt &gt;</li>
+<li>gte &gt;=</li>
+<li>lt &lt;</li>
+<li>lte &lt;=</li>
+</ul>
+<blockquote>
+<p>匹配多个条件</p>
+</blockquote>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211025101309792.png" alt="image-20211025101309792"></p>
+<p>多个条件使用空格隔开，只要满足其中一个结果就可以被查出，这个时候可以通过分值进行基本的判断</p>
+<blockquote>
+<p>精确查询</p>
+</blockquote>
+<p>term查询是直接通过倒排索引指定的词条进程精确地查找</p>
+<p>关于分词：</p>
+<ul>
+<li><p>term直接查询精确的值</p>
+</li>
+<li><p>match会使用分词器解析（先分析文档，然后通过分析的文档进行查询）</p>
+</li>
+</ul>
+<h6 id="两个类型-text-keyword"><a href="#两个类型-text-keyword" class="headerlink" title="两个类型 text keyword"></a>两个类型 text keyword</h6><p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211025102812828.png" alt="image-20211025102812828"></p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211025102823374.png" alt="image-20211025102823374"></p>
+<p>keyword类型的字段不会被分词器解析</p>
+<blockquote>
+<p>多个值匹配精确查询</p>
+</blockquote>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211025105212142.png" alt="image-20211025105212142"></p>
+<blockquote>
+<p>高亮</p>
+</blockquote>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211025105749371.png" alt="image-20211025105749371"></p>
+<p>highlight中的指定字段高亮</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211025111129848.png" alt="image-20211025111129848"></p>
+<p>自定义搜索高亮条件</p>
+<h3 id="集成SpringBoot"><a href="#集成SpringBoot" class="headerlink" title="集成SpringBoot"></a>集成SpringBoot</h3><ol>
+<li>找到原生的依赖</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt; org.elasticsearch.client &lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;elasticsearch-rest-high-level-client&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;7.6.2&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>找对象</li>
+<li>分析这个类中的方法</li>
+</ol>
+<blockquote>
+<p>配置基本的项目</p>
+</blockquote>
+<h3 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h3><h4 id="爬虫"><a href="#爬虫" class="headerlink" title="爬虫"></a>爬虫</h4><h4 id="前后端分离"><a href="#前后端分离" class="headerlink" title="前后端分离"></a>前后端分离</h4><h4 id="搜索高亮"><a href="#搜索高亮" class="headerlink" title="搜索高亮"></a>搜索高亮</h4>
+    </div>
+
+    <div class="about">
+        <h1>About this Post</h1>
+        <p>This post is written by Zhangziyang, licensed under <a
+                target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+    </div>
+
+    
+        
+    
+</article>
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h4 class="title">Blog</h4>
+                
+                <a href="/" class="item" target="_blank">Blog</a>
+                
+                <a href="/archives" class="item" target="_blank">Archives</a>
+                
+                <a href="/friends" class="item" target="_blank">Friends</a>
+                
+                <a href="/projects" class="item" target="_blank">Projects</a>
+                
+                <a href="/about" class="item" target="_blank">About</a>
+                
+                <a href="/atom.xml" class="item" target="_blank">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h4 class="title">Projects</h4>
+                
+                <a href="https://github.com/transmister" class="item" target="_blank">Transmister</a>
+                
+                <a href="https://github.com/MrWillCom/css-and-js-windows-uwp-xaml-controls" class="item" target="_blank">CSS&amp;JS Windows UWP XAML Controls</a>
+                
+                <a href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item" target="_blank">Theme Cupertino</a>
+                
+                <a href="https://github.com/MrWillCom/github-dark-mode" class="item" target="_blank">GitHub Dark Mode</a>
+                
+            </div>
+            
+            <div class="group">
+                <h4 class="title">Me</h4>
+                
+                <a href="https://github.com/1122pcd1122" class="item" target="_blank">GitHub</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2021 Zhangziyang<br >Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></span>
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+        
+<script src="/web/zzy/js/main.js"></script>
+
+        
+    </body>
+</html>
