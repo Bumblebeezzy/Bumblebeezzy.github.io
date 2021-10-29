@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  
+  <title>Nginx - ZzyBlog</title>
+  
+    <link rel="shortcut icon" href="/web/zzy/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+<link rel="stylesheet" href="/web/zzy/css/var.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/main.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/typography.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/components.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/nav.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/footer.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/post-list.css">
+
+  
+<link rel="stylesheet" href="/web/zzy/css/waline.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/web/zzy/css/post.css">
+
+  
+
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+ 
+  
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+    <body data-color-scheme="auto">
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">诸葛庐</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/web/zzy/archives/index.html">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/friends/index.html">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/projects/index.html">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/web/zzy/about/index.html">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/1122pcd1122" target="_blank">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        <article class="post">
+    <div class="meta">
+        
+        <div class="date" id="date">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <span>October</span>
+            
+            
+            
+            <span>28,</span>
+            <span>2021</span>
+        </div>
+        
+
+        <h2 class="title">Nginx</h2>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <h2 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h2><h3 id="什么是Nginx"><a href="#什么是Nginx" class="headerlink" title="什么是Nginx"></a>什么是Nginx</h3><p><em>Nginx</em> (engine x) 是一个高性能的HTTP和反向代理web服务器，同时也提供了IMAP/POP3/SMTP服务。Nginx是由伊戈尔·赛索耶夫为俄罗斯访问量第二的Rambler.ru站点（俄文：Рамблер）开发的，第一个公开版本0.1.0发布于2004年10月4日。因它的稳定性、丰富的功能集、简单的配置文件和低系统资源的消耗而闻名。2011年6月1日，nginx 1.0.4发布。</p>
+<p>其特点是占有内存少，并发能力强，事实上nginx的并发能力在同类型的网页服务器中表现较好，中国大陆使用nginx网站用户有：百度、京东、新浪、网易、腾讯、淘宝等。</p>
+<h3 id="Nginx作用"><a href="#Nginx作用" class="headerlink" title="Nginx作用"></a>Nginx作用</h3><blockquote>
+<p>Http代理，反向代理：多为web服务器最常用的功能之一，尤其是反向代理</p>
+</blockquote>
+<p>正向代理</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211028161645833.png" alt="image-20211028161645833"></p>
+<p>反向代理</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211028161934539.png" alt="image-20211028161934539"></p>
+<blockquote>
+<p>Nginx提供的负载均衡策略有2种：内置策略和扩展策略。内置策略为轮询和加权轮询，iphash</p>
+</blockquote>
+<p>轮询</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211028162108264.png" alt="image-20211028162108264"></p>
+<p>加权轮询</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211028162210506.png" alt="image-20211028162210506"></p>
+<p>iphash对客户端请求的ip进行hash操作，然后根据hash结果将同一个客户端ip的请求分发给同一台服务器进行处理，可以解决session不共享问题</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211028162346944.png" alt="image-20211028162346944"></p>
+<blockquote>
+<p>动静分离，在我们的软件开发中，有些请求是需要后台处理的，有些请求是不需要经过后台处理的（如：css、js、html、jpg等文件），这些不需要经过后台处理的文件成为静态文件。</p>
+</blockquote>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211028162646632.png" alt="image-20211028162646632"></p>
+<blockquote>
+<p>Nginx常用命令</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/nginx/sbin/</span><br><span class="line">./nginx 启动</span><br><span class="line">./nginx -s stop 停止</span><br><span class="line">./nginx -s quit 安全退出</span><br><span class="line">./nginx -s reload 重新加载配置文件</span><br><span class="line">ps aux|grep nginx 查看nginx进程</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>配置文件</p>
+</blockquote>
+<p>配置反向代理</p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211029092724029.png" alt="image-20211029092724029"></p>
+<p><img src="C:\Users\xkdn\AppData\Roaming\Typora\typora-user-images\image-20211029092943959.png" alt="image-20211029092943959"></p>
+
+    </div>
+
+    <div class="about">
+        <h1>About this Post</h1>
+        <p>This post is written by Zhangziyang, licensed under <a
+                target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+    </div>
+
+    
+        
+    
+</article>
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h4 class="title">Blog</h4>
+                
+                <a href="/" class="item" target="_blank">Blog</a>
+                
+                <a href="/archives" class="item" target="_blank">Archives</a>
+                
+                <a href="/friends" class="item" target="_blank">Friends</a>
+                
+                <a href="/projects" class="item" target="_blank">Projects</a>
+                
+                <a href="/about" class="item" target="_blank">About</a>
+                
+                <a href="/atom.xml" class="item" target="_blank">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h4 class="title">Projects</h4>
+                
+                <a href="https://github.com/transmister" class="item" target="_blank">Transmister</a>
+                
+                <a href="https://github.com/MrWillCom/css-and-js-windows-uwp-xaml-controls" class="item" target="_blank">CSS&amp;JS Windows UWP XAML Controls</a>
+                
+                <a href="https://github.com/MrWillCom/hexo-theme-cupertino" class="item" target="_blank">Theme Cupertino</a>
+                
+                <a href="https://github.com/MrWillCom/github-dark-mode" class="item" target="_blank">GitHub Dark Mode</a>
+                
+            </div>
+            
+            <div class="group">
+                <h4 class="title">Me</h4>
+                
+                <a href="https://github.com/1122pcd1122" class="item" target="_blank">GitHub</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2021 Zhangziyang<br >Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></span>
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+        
+<script src="/web/zzy/js/main.js"></script>
+
+        
+    </body>
+</html>
